@@ -3,6 +3,8 @@ vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 vim.opt.number = true
 
+vim.g.mapleader = ','
+
 local path_package = vim.fn.stdpath('data') .. '/site'
 local mini_path = path_package .. '/pack/deps/start/mini.nvim'
 
@@ -74,3 +76,19 @@ hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
 end)
 
 require('ibl').setup { indent = { highlight = highlight } }
+
+-- telescopes
+add({ source = 'nvim-lua/plenary.nvim' })
+add({
+  source = 'nvim-telescope/telescope.nvim',
+  checkout = '*',
+  depends = { 'nvim-lua/plenary.nvim' },
+})
+
+require('telescope').setup()
+
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = 'Telescope find files' })
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
+vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = 'Telescope buffers' })
+vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = 'Telescope help tags' })
