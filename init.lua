@@ -4,7 +4,6 @@ vim.opt.expandtab = true
 vim.opt.number = true
 vim.opt.cursorline = true
 vim.g.mapleader = ','
-vim.api.nvim_set_option("clipboard","unnamed") -- always to clipboard
 math.randomseed()
 
 -- Bootstrap lazy.nvim
@@ -69,7 +68,7 @@ require("lazy").setup({
       -- Supply dependencies near target plugin
       dependencies = {
 	    'williamboman/mason.nvim',
-      }
+      },
     }, -- CORE
     {
       'hrsh7th/nvim-cmp',
@@ -93,12 +92,13 @@ require("lazy").setup({
         notify = false,
     },
 })
+pcall(vim.cmd, 'colorscheme koda')
 
-local colorschemes = { 'monochrome', 'koda', 'poimandres', 'kanagawa-paper', 'boo-colorscheme-nvim' }
-local ok, _ = pcall(vim.cmd, 'colorscheme ' .. colorschemes[math.random(4)])
-if not ok then
-  vim.cmd 'colorscheme default' -- if the above fails, then use default
-end
+-- local colorschemes = { 'koda', 'poimandres', 'kanagawa-paper', 'boo-colorscheme-nvim' }
+-- local ok, _ = pcall(vim.cmd, 'colorscheme ' .. colorschemes[math.random(4)])
+-- if not ok then
+--   vim.cmd 'colorscheme default' -- if the above fails, then use default
+-- end
 
 local cmp = require'cmp'
 cmp.setup({
@@ -155,6 +155,18 @@ local capabilities = require('cmp_nvim_lsp').default_capabilities()
 vim.lsp.enable('pyright')
 vim.lsp.enable('clangd')
 vim.lsp.enable('gopls')
+vim.lsp.enable('rubocop')
+vim.lsp.enable('ruby_lsp')
+
+vim.lsp.config('protols', {
+  -- Add any other custom settings here (cmd, root_markers, etc.)
+  on_attach = function(client, bufnr)
+    -- Explicitly disable formatting capabilities for this server
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
+  end,
+})
+vim.lsp.enable('protols')
 
 vim.api.nvim_create_user_command("FormatDisable", function(args)
     if args.bang then
