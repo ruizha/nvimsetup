@@ -1,10 +1,14 @@
-vim.opt.shiftwidth = 4
-vim.opt.tabstop = 4
+vim.opt.shiftwidth = 2
+vim.opt.tabstop = 2
 vim.opt.expandtab = true
 vim.opt.number = true
 vim.opt.cursorline = true
+vim.opt.termguicolors = true
+vim.opt.colorcolumn = "128"
 vim.g.mapleader = ','
-vim.api.nvim_set_option("clipboard","unnamed") -- always to clipboard
+vim.api.nvim_set_hl(0, "ColorColumn", { bg = "#cfc5b2" })
+
+vim.g.mapleader = ','
 math.randomseed()
 
 -- Bootstrap lazy.nvim
@@ -69,7 +73,7 @@ require("lazy").setup({
       -- Supply dependencies near target plugin
       dependencies = {
 	    'williamboman/mason.nvim',
-      }
+      },
     }, -- CORE
     {
       'hrsh7th/nvim-cmp',
@@ -84,21 +88,21 @@ require("lazy").setup({
       }
     }, -- CORE
     { import = 'plugins' },
+    { import = 'plugins.themes' }
     },
-    -- Configure any other settings here. See the documentation for more details.
-    -- colorscheme that will be used when installing plugins.
-    -- automatically check for plugin updates
     checker = {
         enabled = true,
         notify = false,
     },
 })
+pcall(vim.cmd, 'colorscheme vague')
+require('telescope').load_extension('fzf')
 
-local colorschemes = { 'monochrome', 'koda', 'poimandres', 'kanagawa-paper', 'boo-colorscheme-nvim' }
-local ok, _ = pcall(vim.cmd, 'colorscheme ' .. colorschemes[math.random(4)])
-if not ok then
-  vim.cmd 'colorscheme default' -- if the above fails, then use default
-end
+-- local colorschemes = { 'koda', 'poimandres', 'kanagawa-paper', 'boo-colorscheme-nvim' }
+-- local ok, _ = pcall(vim.cmd, 'colorscheme ' .. colorschemes[math.random(4)])
+-- if not ok then
+--   vim.cmd 'colorscheme default' -- if the above fails, then use default
+-- end
 
 local cmp = require'cmp'
 cmp.setup({
@@ -150,11 +154,25 @@ cmp.setup.cmdline(':', {
 })
 
 -- Set up lspconfig.
+require('mason').setup()
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
--- Replace <YOUR_LSP_SERVER> with each lsp server you've enabled.
 vim.lsp.enable('pyright')
 vim.lsp.enable('clangd')
 vim.lsp.enable('gopls')
+vim.lsp.enable('html')
+vim.lsp.enable('cssls')
+vim.lsp.enable('eslint')
+vim.lsp.enable('kotlin_ls')
+
+vim.lsp.config('protols', {
+  -- Add any other custom settings here (cmd, root_markers, etc.)
+  on_attach = function(client, bufnr)
+    -- Explicitly disable formatting capabilities for this server
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentRangeFormattingProvider = false
+  end,
+})
+vim.lsp.enable('protols')
 
 vim.api.nvim_create_user_command("FormatDisable", function(args)
     if args.bang then

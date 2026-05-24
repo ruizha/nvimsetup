@@ -1,0 +1,25 @@
+return {
+  'https://github.com/vague-theme/vague.nvim',
+  style = {
+    boolean           = "bold",
+    number            = "none",
+    float             = "none",
+    error             = "bold",
+    comments          = "italic",
+    conditionals      = "italic",
+    functions         = "none",
+    headings          = "bold",
+    operators         = "none",
+    strings           = "italic",
+    variables         = "none",
+    keywords          = "italic",
+    keyword_return    = "italic",
+    keywords_loop     = "italic",
+    keywords_label    = "none",
+    keywords_exception = "italic",
+    builtin_constants = "bold",
+    builtin_functions = "none",
+    builtin_types     = "bold",
+    builtin_variables = "none",
+  }
+}
