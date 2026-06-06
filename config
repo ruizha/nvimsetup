@@ -1,0 +1,11 @@
+theme = Kanagawabones
+
+font-family             = Monaspace Argon Frozen
+font-family-bold        = Monaspace Argon Frozen
+font-style-bold         = Bold
+font-family-italic      = Monaspace Radon Frozen
+font-style-italic       = Italic
+font-family-bold-italic = Monaspace Radon Frozen
+font-style-bold-italic  = Bold Italic
+
+font-size = 12
